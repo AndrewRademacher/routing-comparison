@@ -11,6 +11,7 @@ main = scotty 3000 $ do
     get "/time" getTime
     get "/add/:n1/:n2" getAddNum
     get "/add/:w1/:w2" getAddText
+    get "/search" getSearch
 
 getHome :: ActionM ()
 getHome = html "<h1>Hello World!</h1>"
@@ -31,3 +32,16 @@ getAddText = do
         w1 <- param "w1"
         w2 <- param "w2"
         html $ LT.concat [(w1::Text), (w2::Text)]
+
+getSearch :: ActionM ()
+getSearch = do
+        contact <- (param "contactId") `rescue` (\x -> return "Not found.")
+        company <- (param "companyId") `rescue` (\x -> return "Not found.")
+        html $ LT.concat [ "<ul>"
+                         , "<li>Contact ID: ", (contact::Text), "</li>"
+                         , "<li>Company ID: ", (company::Text), "</li>"
+                         , "</ul>"
+                         ]
+
+--  It seems really strange that optional parameters like search params are
+--  expressed as an exception rather than as a maybe.
