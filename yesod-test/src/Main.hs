@@ -37,5 +37,7 @@ getAddTextR :: Text -> Text -> Handler Html
 getAddTextR w1 w2 = let w3 = T.concat [w1, w2]
                      in defaultLayout [whamlet|#{w3}|]
 
+--  No formal implementation of query params
+
 main :: IO ()
 main = warp 3000 App
