@@ -15,6 +15,7 @@ site = ifTop (getHomeHandler) <|>
        route [ ("time", getTimeHandler)
              , ("/add/:n1/:n2", getAddNumHandler)
              , ("/add-text/:w1/:w2", getAddTextHandler)
+             , ("/search", getSearchHandler)
              ]
 
 -- No support for overloading that same route by type.
@@ -48,3 +49,17 @@ getAddTextHandler = do
                             Just w2s -> writeBS $ BS.concat [w1s, w2s]
                             Nothing  -> writeBS "Error"
             Nothing  -> writeBS "Error"
+
+getSearchHandler :: Snap ()
+getSearchHandler = do
+        contact <- getParam "contactId"
+        company <- getParam "companyId"
+        case contact of
+            Nothing -> writeBS "Not found."
+            Just conId -> case company of
+                              Nothing -> writeBS "Not found."
+                              Just comId -> writeBS $ BS.concat [ "<ul>"
+                                                                , "<li>Contact ID: ", conId, "</li>"
+                                                                , "<li>Company ID: ", comId, "</li>"
+                                                                , "</ul>"
+                                                                ]
