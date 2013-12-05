@@ -32,34 +32,28 @@ getAddNumHandler :: Snap ()
 getAddNumHandler = do
         n1 <- getParam "n1"
         n2 <- getParam "n2"
-        case n1 of
-            Just n1s -> case n2 of
-                            Just n2s -> let n1n = (read (BS.unpack n1s) :: Integer)
-                                            n2n = (read (BS.unpack n2s) :: Integer)
-                                         in writeBS $ BS.pack $ show (n1n + n2n)
-                            Nothing  -> writeBS "Error"
-            Nothing  -> writeBS "Error"
+        handle n1 n2
+    where handle (Just n1n) (Just n2n) = let i1 = (read (BS.unpack n1n) :: Integer)
+                                             i2 = (read (BS.unpack n2n) :: Integer)
+                                          in writeBS $ BS.pack $ show (i1 + i2)
+          handle _ _ = writeBS "Error"
 
 getAddTextHandler :: Snap ()
 getAddTextHandler = do
         w1 <- getParam "w1"
         w2 <- getParam "w2"
-        case w1 of
-            Just w1s -> case w2 of
-                            Just w2s -> writeBS $ BS.concat [w1s, w2s]
-                            Nothing  -> writeBS "Error"
-            Nothing  -> writeBS "Error"
+        handle w1 w2
+    where handle (Just w1w) (Just w2w) = writeBS $ BS.concat [w1w, w2w]
+          handle _ _ = writeBS "Error"
 
 getSearchHandler :: Snap ()
 getSearchHandler = do
         contact <- getParam "contactId"
         company <- getParam "companyId"
-        case contact of
-            Nothing -> writeBS "Not found."
-            Just conId -> case company of
-                              Nothing -> writeBS "Not found."
-                              Just comId -> writeBS $ BS.concat [ "<ul>"
-                                                                , "<li>Contact ID: ", conId, "</li>"
-                                                                , "<li>Company ID: ", comId, "</li>"
-                                                                , "</ul>"
-                                                                ]
+        handle contact company
+    where handle (Just conId) (Just comId) = writeBS $ BS.concat [ "<ul>"
+                                                                 , "<li>Contact ID: ", conId, "</li>"
+                                                                 , "<li>Company ID: ", comId, "</li>"
+                                                                 , "</ul>"
+                                                                 ]
+          handle _ _ = writeBS "Error"
