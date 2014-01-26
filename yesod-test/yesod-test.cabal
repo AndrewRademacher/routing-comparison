@@ -26,3 +26,4 @@ executable yesod-test
                     ,  text  >= 0.11.3.1
   hs-source-dirs:      src
   default-language:    Haskell2010
+  ghc-options:         -Wall -O2 -threaded -rtsopts
