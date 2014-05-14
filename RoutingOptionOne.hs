@@ -1,3 +1,5 @@
+-- This is a preposal for how Scotty might handle routing.  Scotty does not currently behave this way.
+
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
 
